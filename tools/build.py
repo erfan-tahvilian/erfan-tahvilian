@@ -36,7 +36,7 @@ for name in ['gold','metallic','dark','light','monochrome']:
     img.save(REPO/f'assets/branding/logo-{name}.png',optimize=True)
     buf=io.BytesIO();img.save(buf,format='PNG',optimize=True)
     variants[name]='data:image/png;base64,'+base64.b64encode(buf.getvalue()).decode()
-    (REPO/f'assets/branding/logo-{name}.svg').write_text(f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 {W} {H}" role="img" aria-labelledby="title"><title id="title">Erfan Tahvilian official logo — {name}</title><image width="{W}" height="{H}" xlink:href="{variants[name]}"/></svg>',encoding='utf-8')
+    (REPO/f'assets/branding/logo-{name}.svg').write_text(f'<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 {W} {H}" role="img" aria-labelledby="title"><title id="title">Erfan Tahvilian official logo - {name}</title><image width="{W}" height="{H}" xlink:href="{variants[name]}"/></svg>',encoding='utf-8')
     if name=='gold':
         for size in [16,32,48,64,180]:img.resize((size,size),Image.Resampling.LANCZOS).save(REPO/f'assets/branding/favicon-{size}.png')
         img.save(REPO/'assets/branding/favicon.ico',sizes=[(16,16),(32,32),(48,48),(64,64)])
@@ -107,7 +107,6 @@ for mode in ['dark','light']:
             b+=text(60,227,'ERFAN',88,'fg',600,-3)+text(60,316,'TAHVILIAN',88,'fg',600,-3)
             b+=line(64,357,120,357,'gold',2)+text(138,364,'WHERE LOGIC MEETS CRAFT.',20,'soft',500,1)
             b+=text(64,416,'Applications. Algorithms. Networks.',22,'muted')
-            b+=text(803,457,'FORM / 01',12,'muted',family='mono',spacing=1.5)
         else:
             b+='<ellipse cx="468" cy="150" rx="270" ry="250" fill="url(#aura)"/>'
             for r in [90,130,172]:b+=circle(476,126,r,'line')
@@ -116,10 +115,10 @@ for mode in ['dark','light']:
             b+=text(28,322,'ERFAN',76,'fg',600,-2)+text(28,407,'TAHVILIAN',76,'fg',600,-2)
             b+=line(32,454,82,454,'gold',2)+text(32,499,'WHERE LOGIC MEETS CRAFT.',24,'soft',500)
             b+=text(32,548,'Applications. Algorithms. Networks.',23,'muted')
-        b+=line(32 if mobile else 64,h-55,w-32 if mobile else w-64,h-55)
+        b+=line(32 if mobile else 64,h-55,w-32 if mobile else 700,h-55)
         b+=text(32 if mobile else 64,h-23,'ERFAN-TAHVILIAN / GITHUB',14 if mobile else 13,'muted',family='mono',spacing=1)
         if not mobile:b+=text(866,h-23,'PRECISION × ELEGANCE',13,'gold',family='mono',spacing=1)
-        save(f'hero/hero-{suffix}.svg',w,h,b,'Erfan Tahvilian — Where logic meets craft.','Erfan Tahvilian visual identity. The complete original logo, recolored gold and ivory, surrounded by measured arcs.')
+        save(f'hero/hero-{suffix}.svg',w,h,b,'Erfan Tahvilian - Where logic meets craft.','Erfan Tahvilian visual identity. The complete original logo, recolored gold and ivory, surrounded by measured arcs.')
         for slug,num,title,category,kind,desc,tags,repo in projects:
             w,h=(600,510) if mobile else (1200,292 if slug!='foxvpn' else 340)
             b=rect(.5,.5,w-1,h-1,'panel','line',12)
@@ -150,7 +149,7 @@ for mode in ['dark','light']:
                 for i,t in enumerate(mobile_desc):b+=text(32,211+i*32,t,26,'muted')
                 b+=line(32,390,w-32,390)
                 b+=text(32,434,' / '.join(tags),24,'soft',family='mono')+text(32,480,'VIEW SOURCE ↗',24,'gold',family='mono')
-            save(f'projects/{slug}-{suffix}.svg',w,h,b,title+' — '+category,' '.join(desc)+' Technologies: '+', '.join(tags)+'. Diagram is schematic, not measured data.')
+            save(f'projects/{slug}-{suffix}.svg',w,h,b,title+' - '+category,' '.join(desc)+' Technologies: '+', '.join(tags)+'. Diagram is schematic, not measured data.')
         w,h=(600,225) if mobile else (1200,170)
         b=rect(0,0,w,h,'bg','none')+line(32,1,w-32,1,'gold')
         b+=logo(32,35,66,mode)
@@ -158,7 +157,14 @@ for mode in ['dark','light']:
         b+=text(120,99,'Precision in the details.',20,'muted')
         b+=text(32 if mobile else 900,186 if mobile else 95,'ERFAN TAHVILIAN',15,'gold',family='mono',spacing=1)
         save(f'components/footer-{suffix}.svg',w,h,b,'Let’s build with intent. Erfan Tahvilian.')
-    save(f'components/divider-{mode}.svg',1200,34,line(0,17,510,17)+path('M550 26A50 50 0 0 1 650 26','gold')+line(600,0,600,34,'gold')+line(690,17,1200,17),'Geometric chapter divider')
+    save(f'components/divider-{mode}.svg',1200,34,line(0,17,1200,17)+line(532,17,668,17,'gold',1.5)+line(532,14,532,20,'gold',1,.5)+line(668,14,668,20,'gold',1,.5),'Precision chapter divider')
+    icon_paths=json.loads((REPO/'tools/social-icons.json').read_text(encoding='utf-8'))
+    for key,label in [('portfolio','Portfolio'),('linkedin','LinkedIn'),('telegram','Telegram'),('github','GitHub')]:
+        b=rect(.5,.5,167,51,'panel','line',8)
+        if key=='portfolio':b+=logo(16,12,28,mode)
+        else:b+=f'<g transform="translate(18 14)" fill="{P["gold"]}"><path d="{icon_paths[key]["path"]}"/></g>'
+        b+=text(56,32,label,17,'fg',500)
+        save(f'components/social-{key}-{mode}.svg',168,52,b,label)
 
 def picture(folder,stem,alt,link=None):
     base=f'assets/{folder}/{stem}'
@@ -172,7 +178,7 @@ readme+='''
 
 # Erfan Tahvilian
 
-I build applications and explore the systems beneath them—from connection controls in FoxVPN to language parsing, scheduling and multipath transport. My public work pairs practical software with focused implementations of core computing ideas.
+I build applications and explore the systems beneath them - from connection controls in FoxVPN to language parsing, scheduling and multipath transport. My public work pairs practical software with focused implementations of core computing ideas.
 
 [Selected work](#selected-work) · [Engineering toolkit](#engineering-toolkit) · [GitHub activity](#github-activity) · [Connect](#connect)
 
@@ -183,7 +189,7 @@ readme+='\n\n'.join(card(p) for p in projects[:3])
 readme+='''
 
 <details>
-<summary><strong>Four more engineering studies — scheduling, optimization, cryptography and numerical methods</strong></summary>
+<summary><strong>Four more engineering studies - scheduling, optimization, cryptography and numerical methods</strong></summary>
 
 '''
 readme+='\n\n'.join(card(p) for p in projects[3:])
@@ -214,7 +220,12 @@ Follow the code as it evolves: [public activity](https://github.com/erfan-tahvil
 
 ## Connect
 
-[Portfolio](https://erfantahvilian.cv) · [LinkedIn](https://www.linkedin.com/in/erfan-tahvilian) · [Telegram](https://t.me/Erfan_Thvn) · [GitHub](https://github.com/erfan-tahvilian)
+<p>
+<a href="https://erfantahvilian.cv"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-portfolio-dark.svg"><img src="assets/components/social-portfolio-light.svg" width="168" alt="Portfolio"></picture></a>
+<a href="https://www.linkedin.com/in/erfan-tahvilian"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-linkedin-dark.svg"><img src="assets/components/social-linkedin-light.svg" width="168" alt="LinkedIn"></picture></a>
+<a href="https://t.me/Erfan_Thvn"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-telegram-dark.svg"><img src="assets/components/social-telegram-light.svg" width="168" alt="Telegram"></picture></a>
+<a href="https://github.com/erfan-tahvilian"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-github-dark.svg"><img src="assets/components/social-github-light.svg" width="168" alt="GitHub"></picture></a>
+</p>
 
 '''
 readme+=picture('components','footer','Let’s build with intent. Precision in the details. Erfan Tahvilian.','https://github.com/erfan-tahvilian')+'\n'
