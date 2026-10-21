@@ -7,7 +7,7 @@
 
 # Erfan Tahvilian
 
-I build applications and explore the systems beneath them—from connection controls in FoxVPN to language parsing, scheduling and multipath transport. My public work pairs practical software with focused implementations of core computing ideas.
+I build applications and explore the systems beneath them - from connection controls in FoxVPN to language parsing, scheduling and multipath transport. My public work pairs practical software with focused implementations of core computing ideas.
 
 [Selected work](#selected-work) · [Engineering toolkit](#engineering-toolkit) · [GitHub activity](#github-activity) · [Connect](#connect)
 
@@ -47,7 +47,7 @@ I build applications and explore the systems beneath them—from connection cont
 </p>
 
 <details>
-<summary><strong>Four more engineering studies — scheduling, optimization, cryptography and numerical methods</strong></summary>
+<summary><strong>Four more engineering studies - scheduling, optimization, cryptography and numerical methods</strong></summary>
 
 <p>
 <a href="https://github.com/erfan-tahvilian/srtf-scheduler">
@@ -118,7 +118,12 @@ Follow the code as it evolves: [public activity](https://github.com/erfan-tahvil
 
 ## Connect
 
-[Portfolio](https://erfantahvilian.cv) · [LinkedIn](https://www.linkedin.com/in/erfan-tahvilian) · [Telegram](https://t.me/Erfan_Thvn) · [GitHub](https://github.com/erfan-tahvilian)
+<p>
+<a href="https://erfantahvilian.cv"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-portfolio-dark.svg"><img src="assets/components/social-portfolio-light.svg" width="168" alt="Portfolio"></picture></a>
+<a href="https://www.linkedin.com/in/erfan-tahvilian"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-linkedin-dark.svg"><img src="assets/components/social-linkedin-light.svg" width="168" alt="LinkedIn"></picture></a>
+<a href="https://t.me/Erfan_Thvn"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-telegram-dark.svg"><img src="assets/components/social-telegram-light.svg" width="168" alt="Telegram"></picture></a>
+<a href="https://github.com/erfan-tahvilian"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-github-dark.svg"><img src="assets/components/social-github-light.svg" width="168" alt="GitHub"></picture></a>
+</p>
 
 <p>
 <a href="https://github.com/erfan-tahvilian">
