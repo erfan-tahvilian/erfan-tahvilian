@@ -169,6 +169,7 @@ for mode in ['dark','light']:
 def picture(folder,stem,alt,link=None):
     base=f'assets/{folder}/{stem}'
     s=f'<picture>\n  <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="{base}-dark-mobile.svg">\n  <source media="(max-width: 640px)" srcset="{base}-light-mobile.svg">\n  <source media="(prefers-color-scheme: dark)" srcset="{base}-dark.svg">\n  <img src="{base}-light.svg" width="1200" alt="{esc(alt)}">\n</picture>'
+    if folder=='projects' and stem=='foxvpn':s=s.replace('.svg"','.svg?v=2"')
     return f'<p>\n<a href="{link}">\n{s}\n</a>\n</p>' if link else s
 def card(p):
     slug,num,title,category,kind,desc,tags,repo=p

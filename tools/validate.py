@@ -6,7 +6,7 @@ root=Path(__file__).resolve().parents[1]
 repo=root
 readme=(repo/'README.md').read_text(encoding='utf-8')
 checks={}
-checks['all_relative_image_paths_exist']=all((repo/p).is_file() for p in re.findall(r'(?:src|srcset)="(assets/[^"]+)"',readme))
+checks['all_relative_image_paths_exist']=all((repo/p.split('?',1)[0]).is_file() for p in re.findall(r'(?:src|srcset)="(assets/[^"]+)"',readme))
 checks['no_script_style_iframe_in_readme']=not re.search(r'<(?:script|style|iframe)\b|\sstyle=',readme,re.I)
 checks['all_seven_repositories_linked']=all(f'https://github.com/erfan-tahvilian/{r}' in readme for r in ['FoxVPN','compiler-lexer-parser','mptcp','srtf-scheduler','simulated-annealing-tsp','simple-des','bisection-root-finder'])
 count=0
