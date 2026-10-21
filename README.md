@@ -19,7 +19,7 @@ I build applications and explore the systems beneath them - from connection cont
   <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="assets/projects/foxvpn-dark-mobile.svg">
   <source media="(max-width: 640px)" srcset="assets/projects/foxvpn-light-mobile.svg">
   <source media="(prefers-color-scheme: dark)" srcset="assets/projects/foxvpn-dark.svg">
-  <img src="assets/projects/foxvpn-light.svg" width="1200" alt="FoxVPN: An independent VPN client with connection controls, application routing and a shared desktop interface. Built with Electron, Node.js, JavaScript. View repository.">
+  <img src="assets/projects/foxvpn-light.svg" width="1200" alt="FoxVPN: A cross-platform VPN client unifying system tunneling, per-app routing and connection diagnostics in one workspace. Built with Electron, Node.js, JavaScript. View repository.">
 </picture>
 </a>
 </p>
