@@ -190,6 +190,7 @@ readme+='''
 
 <details>
 <summary><strong>Four more engineering studies - scheduling, optimization, cryptography and numerical methods</strong></summary>
+<br>
 
 '''
 readme+='\n\n'.join(card(p) for p in projects[3:])
@@ -221,9 +222,9 @@ Follow the code as it evolves: [public activity](https://github.com/erfan-tahvil
 ## Connect
 
 <p>
-<a href="https://erfantahvilian.cv"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-portfolio-dark.svg"><img src="assets/components/social-portfolio-light.svg" width="168" alt="Portfolio"></picture></a>
-<a href="https://www.linkedin.com/in/erfan-tahvilian"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-linkedin-dark.svg"><img src="assets/components/social-linkedin-light.svg" width="168" alt="LinkedIn"></picture></a>
-<a href="https://t.me/Erfan_Thvn"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-telegram-dark.svg"><img src="assets/components/social-telegram-light.svg" width="168" alt="Telegram"></picture></a>
+<a href="https://erfantahvilian.cv"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-portfolio-dark.svg"><img src="assets/components/social-portfolio-light.svg" width="168" alt="Portfolio"></picture></a> &nbsp;&nbsp;
+<a href="https://www.linkedin.com/in/erfan-tahvilian"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-linkedin-dark.svg"><img src="assets/components/social-linkedin-light.svg" width="168" alt="LinkedIn"></picture></a> &nbsp;&nbsp;
+<a href="https://t.me/Erfan_Thvn"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-telegram-dark.svg"><img src="assets/components/social-telegram-light.svg" width="168" alt="Telegram"></picture></a> &nbsp;&nbsp;
 <a href="https://github.com/erfan-tahvilian"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/components/social-github-dark.svg"><img src="assets/components/social-github-light.svg" width="168" alt="GitHub"></picture></a>
 </p>
 
