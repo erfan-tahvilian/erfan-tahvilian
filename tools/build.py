@@ -83,7 +83,7 @@ def motif(kind,x,y,s=1):
     return f'<g transform="translate({x} {y}) scale({s})">{b}</g>'
 
 projects=[
- ('foxvpn','01','FoxVPN','APPLICATION DEVELOPMENT','network',['An independent VPN client with connection controls,','application routing and a shared desktop interface.'],['Electron','Node.js','JavaScript'],'FoxVPN'),
+ ('foxvpn','01','FoxVPN','APPLICATION DEVELOPMENT','network',['A cross-platform VPN client unifying system tunneling,','per-app routing and connection diagnostics in one workspace.'],['Electron','Node.js','JavaScript'],'FoxVPN'),
  ('compiler','02','Compiler / Lexer / Parser','LANGUAGE PROCESSING','parser',['From tokens to parsing tables: recursive descent,','LL(1), LR(1) and LALR(1) in C++.'],['C++','Grammar analysis','CLI'],'compiler-lexer-parser'),
  ('mptcp','03','Multipath TCP','NETWORK SIMULATION','network',['An ns-3 module for multipath transport experiments','with LIA, OLIA and BALIA congestion control.'],['C++','ns-3','CMake'],'mptcp'),
  ('scheduler','04','SRTF Scheduler','OPERATING SYSTEMS','scheduler',['Preemptive scheduling with CSV input, Gantt output','and waiting-time / turnaround-time statistics.'],['C++','Scheduling','CSV'],'srtf-scheduler'),
@@ -138,7 +138,7 @@ for mode in ['dark','light']:
                 # Diagram lives behind no text; mobile gets a separate engineering strip.
                 b+=motif(kind,390,292,.6)
                 mobile_desc={
-                 'foxvpn':['Independent VPN client.','Connection controls and','application routing.'],
+                 'foxvpn':['Cross-platform VPN with','system tunneling, per-app routing','and connection diagnostics.'],
                  'compiler':['Tokenization, grammar analysis','and four parsing strategies','implemented in C++.'],
                  'mptcp':['Multipath transport in ns-3.','LIA, OLIA and BALIA','congestion control.'],
                  'scheduler':['Preemptive scheduling, CSV,','Gantt output and process','timing statistics.'],
