@@ -63,6 +63,15 @@ def motif(kind,x,y,s=1):
         pts=[(10,65),(80,20),(80,110),(160,65),(240,20),(240,110)]
         for a,c in [(0,1),(0,2),(1,3),(2,3),(3,4),(3,5)]:b+=line(*pts[a],*pts[c],'gold',1.5,.7)
         for i,(a,c) in enumerate(pts):b+=circle(a,c,6,'gold','panel',1.5)+circle(a,c,2,'none','gold')
+    elif kind=='config':
+        b+=rect(0,12,78,112,'panel','line',7)
+        for yy in [40,68,96]:
+            b+=line(12,yy,43,yy,'gold',1.5)+circle(60,yy,4,'gold','panel',1.5)
+        b+=line(78,68,118,68,'gold',1.5)+path('M110 60L118 68L110 76','gold',1.5)
+        b+=rect(126,44,48,48,'panel','gold',5)+rect(138,56,24,24,'panel','line',2)
+        for xx in [140,150,160]:b+=line(xx,36,xx,44,'gold')+line(xx,92,xx,100,'gold')
+        b+=line(174,68,204,68,'gold',1.5)
+        b+=path('M212 42C212 30 254 30 254 42V96C254 108 212 108 212 96ZM212 42C212 54 254 54 254 42M212 68C212 80 254 80 254 68','gold',1.5)
     elif kind=='parser':
         b+=path('M125 18V50M125 50H45V88M125 50H205V88M45 88V115M205 88V115','gold',1.5)
         for a,c,t in [(104,0,'S'),(24,88,'A'),(184,88,'B')]:b+=rect(a,c,42,34)+text(a+12,c+23,t,19,'gold',family='mono')
@@ -84,6 +93,7 @@ def motif(kind,x,y,s=1):
 
 projects=[
  ('foxvpn','01','FoxVPN','APPLICATION DEVELOPMENT','network',['A cross-platform VPN client unifying system tunneling,','per-app routing and connection diagnostics in one workspace.'],['Electron','Node.js','JavaScript'],'FoxVPN'),
+ ('config-pilot','02','Config Pilot','CLOUD APPLICATIONS','config',['A self-hosted subscription-config manager with bilingual','web controls and Telegram automation on Cloudflare.'],['JavaScript','Cloudflare Workers','KV'],'config-pilot'),
  ('compiler','02','Compiler / Lexer / Parser','LANGUAGE PROCESSING','parser',['From tokens to parsing tables: recursive descent,','LL(1), LR(1) and LALR(1) in C++.'],['C++','Grammar analysis','CLI'],'compiler-lexer-parser'),
  ('mptcp','03','Multipath TCP','NETWORK SIMULATION','network',['An ns-3 module for multipath transport experiments','with LIA, OLIA and BALIA congestion control.'],['C++','ns-3','CMake'],'mptcp'),
  ('scheduler','04','SRTF Scheduler','OPERATING SYSTEMS','scheduler',['Preemptive scheduling with CSV input, Gantt output','and waiting-time / turnaround-time statistics.'],['C++','Scheduling','CSV'],'srtf-scheduler'),
@@ -91,6 +101,7 @@ projects=[
  ('des','06','Simplified DES','CRYPTOGRAPHY STUDY','cipher',['An educational 8-bit block cipher with a 10-bit key,','visible key scheduling and round transformations.'],['C++','S-DES','CLI'],'simple-des'),
  ('bisection','07','Bisection Root Finder','NUMERICAL METHODS','bisection',['Serial bisection and an OpenMP implementation','for exploring interval-based root finding.'],['C++','OpenMP','Numerical methods'],'bisection-root-finder')
 ]
+projects=[(p[0],f'{i:02}',*p[2:]) for i,p in enumerate(projects,1)]
 for mode in ['dark','light']:
     theme(mode)
     for mobile in [False,True]:
@@ -139,6 +150,7 @@ for mode in ['dark','light']:
                 b+=motif(kind,390,292,.6)
                 mobile_desc={
                  'foxvpn':['Cross-platform VPN with','system tunneling, per-app routing','and connection diagnostics.'],
+                 'config-pilot':['Self-hosted config management.','Bilingual panel and Telegram','automation on Workers and KV.'],
                  'compiler':['Tokenization, grammar analysis','and four parsing strategies','implemented in C++.'],
                  'mptcp':['Multipath transport in ns-3.','LIA, OLIA and BALIA','congestion control.'],
                  'scheduler':['Preemptive scheduling, CSV,','Gantt output and process','timing statistics.'],
@@ -169,7 +181,7 @@ for mode in ['dark','light']:
 def picture(folder,stem,alt,link=None):
     base=f'assets/{folder}/{stem}'
     s=f'<picture>\n  <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="{base}-dark-mobile.svg">\n  <source media="(max-width: 640px)" srcset="{base}-light-mobile.svg">\n  <source media="(prefers-color-scheme: dark)" srcset="{base}-dark.svg">\n  <img src="{base}-light.svg" width="1200" alt="{esc(alt)}">\n</picture>'
-    if folder=='projects' and stem=='foxvpn':s=s.replace('.svg"','.svg?v=2"')
+    if folder=='projects':s=s.replace('.svg"','.svg?v=3"')
     return f'<p>\n<a href="{link}">\n{s}\n</a>\n</p>' if link else s
 def card(p):
     slug,num,title,category,kind,desc,tags,repo=p
@@ -186,7 +198,7 @@ I build applications and explore the systems beneath them - from connection cont
 ## Selected work
 
 '''
-readme+='\n\n'.join(card(p) for p in projects[:3])
+readme+='\n\n'.join(card(p) for p in projects[:4])
 readme+='''
 
 <details>
@@ -194,7 +206,7 @@ readme+='''
 <br>
 
 '''
-readme+='\n\n'.join(card(p) for p in projects[3:])
+readme+='\n\n'.join(card(p) for p in projects[4:])
 readme+='''
 
 Simplified DES is an educational cipher implementation. The diagrams above illustrate project concepts; they are not benchmark results.

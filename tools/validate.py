@@ -8,7 +8,9 @@ readme=(repo/'README.md').read_text(encoding='utf-8')
 checks={}
 checks['all_relative_image_paths_exist']=all((repo/p.split('?',1)[0]).is_file() for p in re.findall(r'(?:src|srcset)="(assets/[^"]+)"',readme))
 checks['no_script_style_iframe_in_readme']=not re.search(r'<(?:script|style|iframe)\b|\sstyle=',readme,re.I)
-checks['all_seven_repositories_linked']=all(f'https://github.com/erfan-tahvilian/{r}' in readme for r in ['FoxVPN','compiler-lexer-parser','mptcp','srtf-scheduler','simulated-annealing-tsp','simple-des','bisection-root-finder'])
+checks['all_eight_repositories_linked']=all(f'https://github.com/erfan-tahvilian/{r}' in readme for r in ['FoxVPN','config-pilot','compiler-lexer-parser','mptcp','srtf-scheduler','simulated-annealing-tsp','simple-des','bisection-root-finder'])
+selected=readme.split('## Selected work',1)[1].split('<details>',1)[0]
+checks['four_selected_projects_in_requested_order']=re.findall(r'<a href="https://github.com/erfan-tahvilian/([^"]+)"',selected)==['FoxVPN','config-pilot','compiler-lexer-parser','mptcp']
 count=0
 for p in repo.rglob('*.svg'):
     t=ET.parse(p);count+=1
