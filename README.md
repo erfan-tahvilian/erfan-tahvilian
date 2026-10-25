@@ -16,10 +16,10 @@ I build applications and explore the systems beneath them - from connection cont
 <p>
 <a href="https://github.com/erfan-tahvilian/FoxVPN">
 <picture>
-  <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="assets/projects/foxvpn-dark-mobile.svg?v=5">
-  <source media="(max-width: 640px)" srcset="assets/projects/foxvpn-light-mobile.svg?v=5">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/projects/foxvpn-dark.svg?v=5">
-  <img src="assets/projects/foxvpn-light.svg?v=5" width="1200" alt="FoxVPN: An independent client built on Mozilla&#x27;s Firefox VPN infrastructure, with system tunneling and per-app routing. Built with Electron, Node.js, JavaScript. View repository.">
+  <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="assets/projects/foxvpn-dark-mobile.svg?v=6">
+  <source media="(max-width: 640px)" srcset="assets/projects/foxvpn-light-mobile.svg?v=6">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/projects/foxvpn-dark.svg?v=6">
+  <img src="assets/projects/foxvpn-light.svg?v=6" width="1200" alt="FoxVPN: An independent client built on Mozilla&#x27;s Firefox VPN infrastructure, with system tunneling and per-app routing. Built with Electron, Node.js, JavaScript. View repository.">
 </picture>
 </a>
 </p>

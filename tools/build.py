@@ -1,5 +1,5 @@
 from pathlib import Path
-from PIL import Image
+from PIL import Image, ImageFilter
 import numpy as np
 import base64, io, shutil, html, json, re, hashlib
 
@@ -41,21 +41,51 @@ for name in ['gold','metallic','dark','light','monochrome']:
         for size in [16,32,48,64,180]:img.resize((size,size),Image.Resampling.LANCZOS).save(REPO/f'assets/branding/favicon-{size}.png')
         img.save(REPO/'assets/branding/favicon.ico',sizes=[(16,16),(32,32),(48,48),(64,64)])
 
-# Preserve the geometry and transparency of the official FoxVPN artwork.
+# Official artwork: remove detached matte specks, then apply a continuous gold
+# color map. A hard RGB mask creates jagged hue transitions at shaded edges.
 fox=Image.open(REPO/'assets/branding/foxvpn-source.png').convert('RGBA')
 fp=np.asarray(fox).copy();fr=fp[:,:,:3].astype(float)
-warm=(fr[:,:,0]>fr[:,:,2]*1.3)&(fr[:,:,0]>fr[:,:,1]*1.08)&(fr[:,:,0]>40)
 lum=(fr[:,:,0]*.2126+fr[:,:,1]*.7152+fr[:,:,2]*.0722)/255
+chroma=(fr.max(axis=2)-fr.min(axis=2))/np.maximum(fr.max(axis=2),1)
+blend=np.clip((chroma-.16)/.29,0,1)
+blend=blend*blend*(3-2*blend)
+brightness=np.clip((fr.max(axis=2)-65)/55,0,1)
+blend*=brightness*brightness*(3-2*brightness)
+mask=np.asarray(fox.getchannel('A').filter(ImageFilter.MedianFilter(3)))>48
+seen=np.zeros(mask.shape,dtype=bool);keep=np.zeros(mask.shape,dtype=np.uint8)
+hh,ww=mask.shape
+for yy,xx in zip(*np.nonzero(mask)):
+    if seen[yy,xx]:continue
+    todo=[(yy,xx)];seen[yy,xx]=True;component=[]
+    while todo:
+        cy,cx=todo.pop();component.append((cy,cx))
+        for ny,nx in [(cy-1,cx),(cy+1,cx),(cy,cx-1),(cy,cx+1)]:
+            if 0<=ny<hh and 0<=nx<ww and mask[ny,nx] and not seen[ny,nx]:
+                seen[ny,nx]=True;todo.append((ny,nx))
+    if len(component)>=180:
+        cy,cx=zip(*component);keep[cy,cx]=255
+support=np.asarray(Image.fromarray(keep).filter(ImageFilter.MaxFilter(5)))>0
+clean_alpha=np.asarray(fox.getchannel('A').filter(ImageFilter.MedianFilter(3)).filter(ImageFilter.GaussianBlur(.45))).astype(float)
+clean_alpha=np.clip((clean_alpha-40)*255/215,0,255).astype(np.uint8)
+clean_alpha[~support]=0
+clean_alpha[clean_alpha<12]=0
+clean_alpha=np.asarray(Image.fromarray(clean_alpha)
+    .filter(ImageFilter.MinFilter(3)).filter(ImageFilter.MaxFilter(3))
+    .filter(ImageFilter.MaxFilter(5)).filter(ImageFilter.MinFilter(5))
+    .filter(ImageFilter.GaussianBlur(.5)))
 fox_variants={}
 for mode in ['dark','light']:
     fa=fp.copy()
     for c in range(3):
         tones=[color(v)[c] for v in ['#71501B','#D4AF37','#F2D479']]
-        fa[:,:,c]=np.where(warm,np.interp(np.sqrt(lum),[0,.65,1],tones),fa[:,:,c])
+        gold=np.interp(np.sqrt(lum),[0,.65,1],tones)
+        neutral=lum*color('#F5F3EB')[c]
+        fa[:,:,c]=np.round(gold*blend+neutral*(1-blend))
     if mode=='dark':
         yy,xx=np.indices(lum.shape)
-        wordmark=(yy>1035)&(xx<595)&(~warm)
+        wordmark=(yy>1035)&(xx<595)
         fa[:,:,:3]=np.where(wordmark[:,:,None],color('#F5F3EB'),fa[:,:,:3])
+    fa[:,:,3]=clean_alpha
     fi=Image.fromarray(fa).crop(fox.getbbox())
     fi.thumbnail((560,560),Image.Resampling.LANCZOS)
     fi.save(REPO/f'assets/branding/foxvpn-{mode}.png',optimize=True)
@@ -223,7 +253,7 @@ for mode in ['dark','light']:
 def picture(folder,stem,alt,link=None):
     base=f'assets/{folder}/{stem}'
     s=f'<picture>\n  <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="{base}-dark-mobile.svg">\n  <source media="(max-width: 640px)" srcset="{base}-light-mobile.svg">\n  <source media="(prefers-color-scheme: dark)" srcset="{base}-dark.svg">\n  <img src="{base}-light.svg" width="1200" alt="{esc(alt)}">\n</picture>'
-    if folder=='projects':s=s.replace('.svg"',f'.svg?v={5}"')
+    if folder=='projects':s=s.replace('.svg"',f'.svg?v={6 if stem=="foxvpn" else 5}"')
     return f'<p>\n<a href="{link}">\n{s}\n</a>\n</p>' if link else s
 def card(p):
     slug,num,title,category,kind,desc,tags,repo=p
