@@ -41,6 +41,27 @@ for name in ['gold','metallic','dark','light','monochrome']:
         for size in [16,32,48,64,180]:img.resize((size,size),Image.Resampling.LANCZOS).save(REPO/f'assets/branding/favicon-{size}.png')
         img.save(REPO/'assets/branding/favicon.ico',sizes=[(16,16),(32,32),(48,48),(64,64)])
 
+# Preserve the geometry and transparency of the official FoxVPN artwork.
+fox=Image.open(REPO/'assets/branding/foxvpn-source.png').convert('RGBA')
+fp=np.asarray(fox).copy();fr=fp[:,:,:3].astype(float)
+warm=(fr[:,:,0]>fr[:,:,2]*1.3)&(fr[:,:,0]>fr[:,:,1]*1.08)&(fr[:,:,0]>40)
+lum=(fr[:,:,0]*.2126+fr[:,:,1]*.7152+fr[:,:,2]*.0722)/255
+fox_variants={}
+for mode in ['dark','light']:
+    fa=fp.copy()
+    for c in range(3):
+        tones=[color(v)[c] for v in ['#71501B','#D4AF37','#F2D479']]
+        fa[:,:,c]=np.where(warm,np.interp(np.sqrt(lum),[0,.65,1],tones),fa[:,:,c])
+    if mode=='dark':
+        yy,xx=np.indices(lum.shape)
+        wordmark=(yy>1035)&(xx<595)&(~warm)
+        fa[:,:,:3]=np.where(wordmark[:,:,None],color('#F5F3EB'),fa[:,:,:3])
+    fi=Image.fromarray(fa).crop(fox.getbbox())
+    fi.thumbnail((560,560),Image.Resampling.LANCZOS)
+    fi.save(REPO/f'assets/branding/foxvpn-{mode}.png',optimize=True)
+    buf=io.BytesIO();fi.save(buf,format='PNG',optimize=True)
+    fox_variants[mode]='data:image/png;base64,'+base64.b64encode(buf.getvalue()).decode()
+
 def esc(t):return html.escape(str(t),quote=True)
 def text(x,y,t,size=20,fill='fg',weight=400,spacing=0,family='sans'):
     font='Consolas, monospace' if family=='mono' else 'Segoe UI, Arial, sans-serif'
@@ -59,43 +80,64 @@ def theme(mode):
     P=({'bg':'#08090B','panel':'#101114','line':'#303027','fg':'#F5F3EB','muted':'#A1A1AA','gold':'#D4AF37','soft':'#F2D479'} if mode=='dark' else {'bg':'#F5F3EB','panel':'#FFFEFA','line':'#D8CEB9','fg':'#1A1B1F','muted':'#57575E','gold':'#8C6A22','soft':'#71501B'})
 def motif(kind,x,y,s=1):
     b=''
-    if kind=='network':
-        pts=[(10,65),(80,20),(80,110),(160,65),(240,20),(240,110)]
-        for a,c in [(0,1),(0,2),(1,3),(2,3),(3,4),(3,5)]:b+=line(*pts[a],*pts[c],'gold',1.5,.7)
-        for i,(a,c) in enumerate(pts):b+=circle(a,c,6,'gold','panel',1.5)+circle(a,c,2,'none','gold')
+    if kind=='foxvpn':
+        mode='dark' if P['bg']=='#08090B' else 'light'
+        b+=f'<image x="26" y="-24" width="208" height="208" preserveAspectRatio="xMidYMid meet" xlink:href="{fox_variants[mode]}"/>'
+    elif kind=='multipath':
+        for i,yy in enumerate([20,66,112]):
+            b+=path(f'M43 66C80 66 70 {yy} 105 {yy}H158C190 {yy} 176 66 211 66','gold',1.5)
+            b+=rect(108,yy-10,48,20,'panel','line',4)+text(115,yy+4,f'TCP {i+1}',11,'soft',family='mono')
+        for xx,t in [(0,'TX'),(211,'RX')]:b+=rect(xx,45,42,42,'panel','gold',7)+text(xx+10,71,t,16,'gold',family='mono')
+        b+=text(35,143,'LIA / OLIA / BALIA',13,'muted',family='mono')
     elif kind=='config':
-        b+=rect(0,12,78,112,'panel','line',7)
-        for yy in [40,68,96]:
-            b+=line(12,yy,43,yy,'gold',1.5)+circle(60,yy,4,'gold','panel',1.5)
-        b+=line(78,68,118,68,'gold',1.5)+path('M110 60L118 68L110 76','gold',1.5)
-        b+=rect(126,44,48,48,'panel','gold',5)+rect(138,56,24,24,'panel','line',2)
-        for xx in [140,150,160]:b+=line(xx,36,xx,44,'gold')+line(xx,92,xx,100,'gold')
-        b+=line(174,68,204,68,'gold',1.5)
-        b+=path('M212 42C212 30 254 30 254 42V96C254 108 212 108 212 96ZM212 42C212 54 254 54 254 42M212 68C212 80 254 80 254 68','gold',1.5)
+        for yy,t in [(14,'WEB'),(88,'BOT')]:
+            b+=rect(0,yy,52,32,'panel','line',5)+text(13,yy+21,t,14,'soft',family='mono')
+            b+=path(f'M52 {yy+16}H76V67H105','gold',1.5)
+        b+=rect(105,42,72,50,'panel','gold',7)+text(115,72,'WORKER',13,'gold',family='mono')
+        b+=line(177,67,210,67,'gold',1.5)+path('M203 62L210 67L203 72','gold',1.5)
+        b+=path('M213 42C213 29 253 29 253 42V93C253 106 213 106 213 93ZM213 42C213 55 253 55 253 42','gold',1.5)
+        b+=text(225,79,'KV',15,'soft',family='mono')+text(66,143,'CLOUDFLARE EDGE',13,'muted',family='mono')
     elif kind=='parser':
-        b+=path('M125 18V50M125 50H45V88M125 50H205V88M45 88V115M205 88V115','gold',1.5)
-        for a,c,t in [(104,0,'S'),(24,88,'A'),(184,88,'B')]:b+=rect(a,c,42,34)+text(a+12,c+23,t,19,'gold',family='mono')
+        for xx,t in [(0,'SOURCE'),(91,'LEXER'),(182,'PARSER')]:
+            b+=rect(xx,12,70,34,'panel','gold' if t=='PARSER' else 'line',5)+text(xx+9,34,t,13,'soft',family='mono')
+            if xx<182:b+=line(xx+70,29,xx+88,29,'gold',1.5)+path(f'M{xx+82} 24L{xx+88} 29L{xx+82} 34','gold',1.5)
+        b+=path('M217 46V72H28M28 72V103M92 72V103M156 72V103M220 72V103','gold',1.5)
+        for xx,t in [(0,'RD'),(64,'LL(1)'),(128,'LR(1)'),(192,'LALR(1)')]:b+=rect(xx,103,60,30,'panel','line',5)+text(xx+5,123,t,12,'gold',family='mono')
     elif kind=='scheduler':
-        for i,(a,l) in enumerate([(0,85),(85,45),(130,75),(205,45)]):b+=rect(a,45,l-3,44,'gold' if i%2==0 else 'panel','gold')
-        b+=line(0,110,250,110)+text(0,138,'PREEMPT · EXECUTE · REPEAT',13,'muted',family='mono')
+        b+=text(0,16,'SHORTEST REMAINING TIME',13,'muted',family='mono')
+        for a,z,t in [(0,1,'P1'),(1,3,'P2'),(3,4,'P3'),(4,9,'P1')]:
+            xx=a*28;ww=(z-a)*28
+            b+=rect(xx,48,ww-2,40,'gold' if t=='P1' else 'panel','gold',2)+text(xx+max(3,(ww-18)/2),73,t,12,'bg' if t=='P1' else 'soft',family='mono')
+        b+=line(0,102,252,102)
+        for a in [0,1,3,4,9]:b+=line(a*28,98,a*28,106,'gold')+text(a*28-3,124,a,12,'muted',family='mono')
+        b+=path('M28 25V42M23 37L28 42L33 37','gold',1.5)
     elif kind=='annealing':
-        pts=[(5,100),(60,25),(115,115),(180,10),(245,80)]
-        b+=path('M5 100L60 25L180 10L245 80L115 115Z','gold',1.8)
-        for a,c in pts:b+=circle(a,c,5,'gold','panel',1.5)
+        pts=[(6,69),(41,20),(100,13),(144,60),(113,112),(44,120)]
+        b+=path('M6 69L100 13L44 120L144 60L41 20L113 112Z','line',1)
+        b+=path('M6 69L41 20L100 13L144 60L113 112L44 120Z','gold',1.8)
+        for a,c in pts:b+=circle(a,c,4,'gold','panel',1.5)
+        b+=line(178,18,178,116)+line(178,116,255,116)
+        b+=path('M181 24C190 57 193 82 210 96S239 108 252 109','gold',2)
+        b+=text(167,13,'T',13,'gold',family='mono')+text(184,138,'COOLING',12,'muted',family='mono')
     elif kind=='cipher':
-        b+=path('M30 10H100L210 115M210 10H140L30 115','gold',1.5)
-        for a,c,t in [(8,0,'L'),(188,0,'R'),(100,48,'⊕'),(8,110,'R'),(188,110,'L')]:b+=rect(a,c,42,32)+text(a+12,c+23,t,19,'gold',family='mono')
+        b+=path('M50 34V61M200 34V94L50 114M200 72H172M112 72H61M50 83V94L200 114','gold',1.5)
+        for xx,yy,t in [(20,8,'L0'),(170,8,'R0'),(20,114,'L1'),(170,114,'R1')]:b+=rect(xx,yy,60,26,'panel','line',5)+text(xx+20,yy+18,t,13,'soft',family='mono')
+        b+=rect(112,55,60,34,'panel','gold',5)+text(123,77,'f(K)',14,'gold',family='mono')
+        b+=circle(50,72,11,'gold','panel',1.5)+line(44,72,56,72,'gold')+line(50,66,50,78,'gold')
+        b+=text(137,38,'K',13,'muted',family='mono')+line(142,42,142,55,'gold')
     elif kind=='bisection':
-        b+=line(0,90,255,90)+line(128,0,128,145)+path('M5 140C70 140 80 125 128 90S180 20 250 8','gold',2)
-        for a in [35,80,105,128,150,180,220]:b+=line(a,84,a,96,'gold')
-        b+=circle(128,90,5,'gold','panel',2)
+        b+=line(0,66,255,66)+line(12,8,12,90)
+        b+=path('M24 88C78 86 107 92 145 66S203 20 248 12','gold',2)
+        b+=circle(145,66,4,'gold','panel',1.5)
+        for xx,t in [(30,'a'),(130,'m'),(230,'b')]:b+=line(xx,61,xx,71,'gold')+text(xx-4,85,t,12,'muted',family='mono')
+        for a,z,yy in [(30,230,103),(130,230,119),(130,180,135)]:b+=path(f'M{a} {yy-4}V{yy}H{z}V{yy-4}','gold',1.5,opacity=.8)
     return f'<g transform="translate({x} {y}) scale({s})">{b}</g>'
 
 projects=[
- ('foxvpn','01','FoxVPN','APPLICATION DEVELOPMENT','network',["An independent client built on Mozilla's Firefox VPN",'infrastructure, with system tunneling and per-app routing.'],['Electron','Node.js','JavaScript'],'FoxVPN'),
+ ('foxvpn','01','FoxVPN','APPLICATION DEVELOPMENT','foxvpn',["An independent client built on Mozilla's Firefox VPN",'infrastructure, with system tunneling and per-app routing.'],['Electron','Node.js','JavaScript'],'FoxVPN'),
  ('config-pilot','02','Config Pilot','CLOUD APPLICATIONS','config',['A self-hosted subscription-config manager with bilingual','web controls and Telegram automation on Cloudflare.'],['JavaScript','Cloudflare Workers','KV'],'config-pilot'),
  ('compiler','02','Compiler / Lexer / Parser','LANGUAGE PROCESSING','parser',['From tokens to parsing tables: recursive descent,','LL(1), LR(1) and LALR(1) in C++.'],['C++','Grammar analysis','CLI'],'compiler-lexer-parser'),
- ('mptcp','03','Multipath TCP','NETWORK SIMULATION','network',['An ns-3 module for multipath transport experiments','with LIA, OLIA and BALIA congestion control.'],['C++','ns-3','CMake'],'mptcp'),
+ ('mptcp','03','Multipath TCP','NETWORK SIMULATION','multipath',['An ns-3 module for multipath transport experiments','with LIA, OLIA and BALIA congestion control.'],['C++','ns-3','CMake'],'mptcp'),
  ('scheduler','04','SRTF Scheduler','OPERATING SYSTEMS','scheduler',['Preemptive scheduling with CSV input, Gantt output','and waiting-time / turnaround-time statistics.'],['C++','Scheduling','CSV'],'srtf-scheduler'),
  ('annealing','05','Simulated Annealing / TSP','OPTIMIZATION','annealing',['A configurable annealing search over a distance','matrix, with route costs and cooling parameters.'],['C++','Metaheuristics','CSV'],'simulated-annealing-tsp'),
  ('des','06','Simplified DES','CRYPTOGRAPHY STUDY','cipher',['An educational 8-bit block cipher with a 10-bit key,','visible key scheduling and round transformations.'],['C++','S-DES','CLI'],'simple-des'),
@@ -138,7 +180,7 @@ for mode in ['dark','light']:
             if not mobile:
                 b+=text(32,112,title,40,'fg',600,-.6)
                 for i,t in enumerate(desc):b+=text(32,161+i*30,t,23,'muted')
-                b+=motif(kind,887,89,1)
+                b+=motif(kind,887,77,1)
                 b+=line(32,h-61,w-32,h-61)
                 b+=text(32,h-25,'  /  '.join(tags),16,'soft',family='mono')+text(947,h-25,'VIEW SOURCE ↗',15,'gold',family='mono')
                 if slug=='foxvpn':b+=text(32,257,'FEATURED PROJECT',13,'gold',family='mono',spacing=1.5)
@@ -147,7 +189,7 @@ for mode in ['dark','light']:
                 titles={'compiler':['Compiler / Lexer','/ Parser'],'annealing':['Simulated Annealing','/ TSP'],'bisection':['Bisection','Root Finder']}.get(slug,[title])
                 for i,t in enumerate(titles):b+=text(30,103+i*43,t,38,'fg',600,-.4)
                 # Diagram lives behind no text; mobile gets a separate engineering strip.
-                b+=motif(kind,390,292,.6)
+                b+=motif(kind,390,292,.49 if kind=='foxvpn' else .6)
                 mobile_desc={
                  'foxvpn':['An independent client built on',"Mozilla's Firefox VPN infrastructure,",'with tunneling and per-app routing.'],
                  'config-pilot':['Self-hosted config management.','Bilingual panel and Telegram','automation on Workers and KV.'],
@@ -161,7 +203,7 @@ for mode in ['dark','light']:
                 for i,t in enumerate(mobile_desc):b+=text(32,211+i*32,t,26,'muted')
                 b+=line(32,390,w-32,390)
                 b+=text(32,434,' / '.join(tags),24,'soft',family='mono')+text(32,480,'VIEW SOURCE ↗',24,'gold',family='mono')
-            save(f'projects/{slug}-{suffix}.svg',w,h,b,title+' - '+category,' '.join(desc)+' Technologies: '+', '.join(tags)+'. Diagram is schematic, not measured data.')
+            save(f'projects/{slug}-{suffix}.svg',w,h,b,title+' - '+category,' '.join(desc)+' Technologies: '+', '.join(tags)+('. Official FoxVPN logo in the profile palette.' if slug=='foxvpn' else '. Diagram is schematic, not measured data.'))
         w,h=(600,225) if mobile else (1200,170)
         b=rect(0,0,w,h,'bg','none')+line(32,1,w-32,1,'gold')
         b+=logo(32,35,66,mode)
@@ -181,7 +223,7 @@ for mode in ['dark','light']:
 def picture(folder,stem,alt,link=None):
     base=f'assets/{folder}/{stem}'
     s=f'<picture>\n  <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="{base}-dark-mobile.svg">\n  <source media="(max-width: 640px)" srcset="{base}-light-mobile.svg">\n  <source media="(prefers-color-scheme: dark)" srcset="{base}-dark.svg">\n  <img src="{base}-light.svg" width="1200" alt="{esc(alt)}">\n</picture>'
-    if folder=='projects':s=s.replace('.svg"',f'.svg?v={4 if stem=="foxvpn" else 3}"')
+    if folder=='projects':s=s.replace('.svg"',f'.svg?v={5}"')
     return f'<p>\n<a href="{link}">\n{s}\n</a>\n</p>' if link else s
 def card(p):
     slug,num,title,category,kind,desc,tags,repo=p

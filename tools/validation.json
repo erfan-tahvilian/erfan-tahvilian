@@ -10,8 +10,8 @@
   "black_background_removed": true,
   "white_logo_components_preserved": true,
   "original_source_sha256": "be54a1c910e6d24204b7f6d50b522d186c04c4f126a9fd6066437fa81b9f6fab",
-  "total_repo_bytes": 1315651,
-  "largest_asset_bytes": 67332,
+  "total_repo_bytes": 3952503,
+  "largest_asset_bytes": 973403,
   "contrast_ratios": {
     "#A1A1AA on #101114": 7.37,
     "#D4AF37 on #101114": 8.98,
