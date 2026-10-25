@@ -92,7 +92,7 @@ def motif(kind,x,y,s=1):
     return f'<g transform="translate({x} {y}) scale({s})">{b}</g>'
 
 projects=[
- ('foxvpn','01','FoxVPN','APPLICATION DEVELOPMENT','network',['A cross-platform VPN client unifying system tunneling,','per-app routing and connection diagnostics in one workspace.'],['Electron','Node.js','JavaScript'],'FoxVPN'),
+ ('foxvpn','01','FoxVPN','APPLICATION DEVELOPMENT','network',["An independent client built on Mozilla's Firefox VPN",'infrastructure, with system tunneling and per-app routing.'],['Electron','Node.js','JavaScript'],'FoxVPN'),
  ('config-pilot','02','Config Pilot','CLOUD APPLICATIONS','config',['A self-hosted subscription-config manager with bilingual','web controls and Telegram automation on Cloudflare.'],['JavaScript','Cloudflare Workers','KV'],'config-pilot'),
  ('compiler','02','Compiler / Lexer / Parser','LANGUAGE PROCESSING','parser',['From tokens to parsing tables: recursive descent,','LL(1), LR(1) and LALR(1) in C++.'],['C++','Grammar analysis','CLI'],'compiler-lexer-parser'),
  ('mptcp','03','Multipath TCP','NETWORK SIMULATION','network',['An ns-3 module for multipath transport experiments','with LIA, OLIA and BALIA congestion control.'],['C++','ns-3','CMake'],'mptcp'),
@@ -149,7 +149,7 @@ for mode in ['dark','light']:
                 # Diagram lives behind no text; mobile gets a separate engineering strip.
                 b+=motif(kind,390,292,.6)
                 mobile_desc={
-                 'foxvpn':['Cross-platform VPN with','system tunneling, per-app routing','and connection diagnostics.'],
+                 'foxvpn':['An independent client built on',"Mozilla's Firefox VPN infrastructure,",'with tunneling and per-app routing.'],
                  'config-pilot':['Self-hosted config management.','Bilingual panel and Telegram','automation on Workers and KV.'],
                  'compiler':['Tokenization, grammar analysis','and four parsing strategies','implemented in C++.'],
                  'mptcp':['Multipath transport in ns-3.','LIA, OLIA and BALIA','congestion control.'],
@@ -181,7 +181,7 @@ for mode in ['dark','light']:
 def picture(folder,stem,alt,link=None):
     base=f'assets/{folder}/{stem}'
     s=f'<picture>\n  <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="{base}-dark-mobile.svg">\n  <source media="(max-width: 640px)" srcset="{base}-light-mobile.svg">\n  <source media="(prefers-color-scheme: dark)" srcset="{base}-dark.svg">\n  <img src="{base}-light.svg" width="1200" alt="{esc(alt)}">\n</picture>'
-    if folder=='projects':s=s.replace('.svg"','.svg?v=3"')
+    if folder=='projects':s=s.replace('.svg"',f'.svg?v={4 if stem=="foxvpn" else 3}"')
     return f'<p>\n<a href="{link}">\n{s}\n</a>\n</p>' if link else s
 def card(p):
     slug,num,title,category,kind,desc,tags,repo=p
