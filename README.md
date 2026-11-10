@@ -7,19 +7,19 @@
 
 # Erfan Tahvilian
 
-I build applications and explore the systems beneath them - from connection controls in FoxVPN to language parsing, scheduling and multipath transport. My public work pairs practical software with focused implementations of core computing ideas.
+I build applications and explore the systems beneath them - from connection controls in PredatorVPN to language parsing, scheduling and multipath transport. My public work pairs practical software with focused implementations of core computing ideas.
 
 [Selected work](#selected-work) · [Engineering toolkit](#engineering-toolkit) · [GitHub activity](#github-activity) · [Connect](#connect)
 
 ## Selected work
 
 <p>
-<a href="https://github.com/erfan-tahvilian/FoxVPN">
+<a href="https://github.com/erfan-tahvilian/PredatorVPN">
 <picture>
-  <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="assets/projects/foxvpn-dark-mobile.svg?v=7">
-  <source media="(max-width: 640px)" srcset="assets/projects/foxvpn-light-mobile.svg?v=7">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/projects/foxvpn-dark.svg?v=7">
-  <img src="assets/projects/foxvpn-light.svg?v=7" width="1200" alt="FoxVPN: An independent client built on Mozilla&#x27;s Firefox VPN infrastructure, with system tunneling and per-app routing. Built with Electron, Node.js, JavaScript. View repository.">
+  <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="assets/projects/predatorvpn-dark-mobile.svg?v=8">
+  <source media="(max-width: 640px)" srcset="assets/projects/predatorvpn-light-mobile.svg?v=8">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/projects/predatorvpn-dark.svg?v=8">
+  <img src="assets/projects/predatorvpn-light.svg?v=8" width="1200" alt="PredatorVPN: An independent client built on Mozilla&#x27;s Firefox VPN infrastructure, with system tunneling and per-app routing. Built with Electron, Node.js, JavaScript. View repository.">
 </picture>
 </a>
 </p>
