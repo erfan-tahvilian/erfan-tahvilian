@@ -16,10 +16,10 @@ I build applications and explore the systems beneath them - from connection cont
 <p>
 <a href="https://github.com/erfan-tahvilian/PredatorVPN">
 <picture>
-  <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="assets/projects/predatorvpn-dark-mobile.svg?v=9">
-  <source media="(max-width: 640px)" srcset="assets/projects/predatorvpn-light-mobile.svg?v=9">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/projects/predatorvpn-dark.svg?v=9">
-  <img src="assets/projects/predatorvpn-light.svg?v=9" width="1200" alt="PredatorVPN: A cross-platform VPN application featuring system-wide tunneling, per-app routing, and flexible connection controls. Built with Electron, Node.js, JavaScript. View repository.">
+  <source media="(prefers-color-scheme: dark) and (max-width: 640px)" srcset="assets/projects/predatorvpn-dark-mobile.svg?v=10">
+  <source media="(max-width: 640px)" srcset="assets/projects/predatorvpn-light-mobile.svg?v=10">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/projects/predatorvpn-dark.svg?v=10">
+  <img src="assets/projects/predatorvpn-light.svg?v=10" width="1200" alt="Predator VPN: A cross-platform VPN application featuring system-wide tunneling, per-app routing, and flexible connection controls. Built with Electron, Node.js, JavaScript. View repository.">
 </picture>
 </a>
 </p>
